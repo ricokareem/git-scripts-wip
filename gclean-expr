@@ -1,0 +1,1 @@
+git branch -a --merged | grep -v "\*" | grep -v origin/master | xargs -n 1 gclean

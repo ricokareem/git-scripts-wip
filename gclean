@@ -1,0 +1,13 @@
+OUT=`git log origin/master..$1`
+if [[ $OUT != "" ]]; then
+printf '%s\n'
+  echo ">>>>> ERROR -- Cannot auto-delete remote branch! <<<<<"
+  echo "Target branch contains unmerged commits. Please cherry-pick the commits or merge the branch again."
+  echo "Exiting..."
+  printf '%s\n'
+  exit 0
+else
+  branch_to_delete=$(echo "$1" | sed -e 's/remotes\/origin\///g')
+  # echo $branch_to_delete
+  git push origin :$branch_to_delete
+fi

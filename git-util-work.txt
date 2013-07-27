@@ -1,0 +1,24 @@
+Prune all local branches that have been merged to master (for webyp)...
+
+  git branch --merged master | grep -v 'master$' | xargs git branch -d
+
+
+Prune all local branches that have been merged in to develop (for ypu)...
+
+  git branch --merged develop | grep -v 'develop$' | xargs git branch -d
+
+#!/bin/bash
+
+# Deletes the remote branch on origin if it is safe to do so.
+eval "OUT=\"`git log ..origin/$1`\""
+if [[ $OUT != "" ]]; then
+  printf '%s\n'
+  echo ">>>>> ERROR -- Cannot auto-delete remote branch! <<<<<"
+  echo "Target branch contains unmerged commits. Please cherry-pick the commits or merge the branch again."
+  echo "Exiting..."
+  printf '%s\n'
+  exit 0
+else
+  echo "deleting this branch remotely"
+  git push origin :$1
+fi
